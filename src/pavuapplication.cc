@@ -30,8 +30,23 @@
 #include "pavucontrol.h"
 #include "mainwindow.h"
 
+#include <cstdlib>
+#include <ctime>
+
+static Glib::ustring generate_application_id()
+{
+    Glib::ustring app_id("org.pulseaudio.pavucontrol");
+
+    srand((unsigned)time(0));
+    app_id += '_';
+    for (size_t i = 0; i < 30; i++)
+        app_id += (char)('a' + (rand()%26));
+
+    return app_id;
+}
+
 PavuApplication::PavuApplication() :
-    Gtk::Application("org.pulseaudio.pavucontrol", Gio::ApplicationFlags::APPLICATION_HANDLES_COMMAND_LINE),
+    Gtk::Application(generate_application_id(), Gio::ApplicationFlags::APPLICATION_HANDLES_COMMAND_LINE),
     mainWindow(NULL),
     retry(false),
     maximize(false),
